@@ -27,6 +27,7 @@ plt.xlabel("Number of Slices")
 plt.ylabel("Time (s)")
 plt.legend(bbox_to_anchor=(1.04, 1), loc="upper left", borderaxespad=0, frameon=False)
 plt.savefig('plots/results_time.eps', bbox_inches="tight")
+plt.savefig('plots/results_time.png', bbox_inches="tight")
 
 # total Communication Rounds
 print("Plotting Total Communication Rounds")
@@ -40,6 +41,7 @@ plt.xlabel("Number of Slices")
 plt.ylabel("Communication Rounds")
 plt.legend(bbox_to_anchor=(1.04, 1), loc="upper left", borderaxespad=0, frameon=False)
 plt.savefig('plots/results_communication_rounds.eps', bbox_inches="tight")
+plt.savefig('plots/results_communication_rounds.png', bbox_inches="tight")
 
 
 # single Party Data Sent
@@ -54,3 +56,4 @@ plt.xlabel("Number of Slices")
 plt.ylabel("Data Sent (MB)")
 plt.legend(bbox_to_anchor=(1.04, 1), loc="upper left", borderaxespad=0, frameon=False)
 plt.savefig('plots/results_data_sent.eps', bbox_inches="tight")
+plt.savefig('plots/results_data_sent.png', bbox_inches="tight")
