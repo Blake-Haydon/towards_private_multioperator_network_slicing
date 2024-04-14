@@ -1,0 +1,100 @@
+import sys
+from Compiler.types import sint, Array
+from Compiler.sorting import radix_sort
+
+# define constants used in the program
+SID_I = 0 # index of the slice ID's
+N_SID_I = 1 # index of the number of SID's allocated
+MIN_I = 2 # index of the minimum number of SID's to be shared
+
+P0 = 0 # index of player 0
+P1 = 1 # index of player 1
+
+# get options from the command line
+program.options_from_args()
+
+# number of elements in the arrays
+n_sids = int(program.args[1])
+n_rb = int(program.args[2])
+n_rb_bits = int(program.args[3])
+
+# DEBUG: These print statements are useful for debugging
+# print_ln("\n")
+# print_ln("Running %s SID's per participant", n_sids)
+# print_ln("Using a total of %s slots", n_rb)
+# print_ln("")
+
+# create two matrices of size 2xn
+# these contain the Slice ID's (SIDs) and the number of slots requested per player
+P0_sids = sint.Matrix(3, n_sids) # (SID, allocated number of slots, min shared slots)
+P1_sids = sint.Matrix(3, n_sids) # (SID, allocated number of slots, min shared slots)
+
+# read slice ID's from file
+# values are taken from Input-P0-0 and Input-P1-0
+P0_sids[SID_I].input_from(0)
+P1_sids[SID_I].input_from(1)
+
+# this is the same test data for the plaintext version
+# the last slice will simply be allocated the remaining slots
+@for_range(n_sids-1)
+def _(i):
+    P0_sids[N_SID_I][i] = 1
+    P1_sids[N_SID_I][i] = 1
+P0_sids[N_SID_I][n_sids-1] = n_rb - n_sids + 1
+P1_sids[N_SID_I][n_sids-1] = n_rb - n_sids + 1
+
+# create a matrix to store the minimum number of slots
+# this is so we can run the loops in parallel then add later
+min_shared_slots = sint.Matrix(n_sids, n_sids).assign_all(0)
+
+@for_range_parallel(n_sids*n_sids, [n_sids, n_sids])
+def _(i, j):
+    match = P0_sids[SID_I][i] == P1_sids[SID_I][j]
+    min_rb = P1_sids[N_SID_I][j].min(P0_sids[N_SID_I][i])
+    
+    # we must multiply by `match` so that we get 0 in the 
+    # case of a non-match
+    min_shared_slots[i][j] = match * min_rb
+    
+# allocate the minimum number of slots to each participant
+@for_range(n_sids)
+def _(i):
+    @for_range(n_sids)
+    def _(j):
+        P0_sids[MIN_I][i] += min_shared_slots[i][j]
+        P1_sids[MIN_I][j] += min_shared_slots[i][j]
+
+# DEBUG: These print statements are useful for debugging
+#        but violate the privacy of the participants and 
+#        should not be used in a real application
+# print_ln("Initial Values")
+# print_ln("P0 SID's: %s", P0_sids[SID_I].reveal())
+# print_ln("P0 num SID slots: %s", P0_sids[N_SID_I].reveal())
+# print_ln("P1 SID's: %s", P1_sids[SID_I].reveal())
+# print_ln("P1 num SID slots: %s", P1_sids[N_SID_I].reveal())
+# print_ln("")
+# print_ln("Min Shared Values")
+# print_ln("P0 min slots: %s", P0_sids[MIN_I].reveal())
+# print_ln("P1 min slots: %s", P1_sids[MIN_I].reveal())
+# print_ln("")
+
+# sort the SID's by the number of slots allocated
+# INFO: `radix_sort` is in-place and therefore does not return a value
+# INFO: `radix_sort` operates in ascending order, i.e. the smallest 
+# values are first
+radix_sort(P0_sids[MIN_I], P0_sids[SID_I], n_bits=n_rb_bits, signed=False)
+radix_sort(P1_sids[MIN_I], P1_sids[SID_I], n_bits=n_rb_bits, signed=False)
+
+# reveal the SID allocation to the correct players
+P0_sids[SID_I].reveal_to(P0).binary_output()
+P1_sids[SID_I].reveal_to(P1).binary_output()
+
+# DEBUG: These print statements are useful for debugging
+#        but violate the privacy of the participants and 
+#        should not be used in a real application
+# print_ln("Sorted Values")
+# print_ln("P0 sorted SID's: %s", P0_sids[SID_I].reveal())
+# print_ln("P0 sorted num SID slots: %s", P0_sids[N_SID_I].reveal())
+# print_ln("P1 sorted SID's: %s", P1_sids[SID_I].reveal())
+# print_ln("P1 sorted num SID slots: %s", P1_sids[N_SID_I].reveal())
+# print_ln("\n")

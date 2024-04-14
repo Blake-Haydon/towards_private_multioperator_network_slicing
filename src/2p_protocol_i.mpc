@@ -1,0 +1,43 @@
+import sys
+from Compiler.types import sint, Array
+
+# define constants used in the program
+P0 = 0 # index of player 0
+P1 = 1 # index of player 1
+
+# get options from the command line
+program.options_from_args()
+
+# number of SID's to compare
+n_sids = int(program.args[1])
+
+# DEBUG: These print statements are useful for debugging
+# print_ln("\n")
+# print_ln("Running %s SID's per participant", n_sids)
+
+# create two arrays of size `n_sids`
+# these contain the Slice ID's (SIDs)
+P0_sids = sint.Array(n_sids)
+P1_sids = sint.Array(n_sids)
+
+# create a flag to indicate if there is a match
+# between the two arrays of SIDs
+matches = sint.Matrix(n_sids, n_sids).assign_all(0)
+
+# input the values of the arrays
+# values are taken from Input-P0-0 and Input-P1-0
+P0_sids.input_from(0)
+P1_sids.input_from(1)
+
+@for_range_parallel(n_sids*n_sids, [n_sids, n_sids])
+def _(i, j):
+   matches[i][j] = P0_sids[i] == P1_sids[j]
+
+# DEBUG: These print statements are useful for debugging
+#        but violate the privacy of the participants and 
+#        should not be used in a real application
+# print_ln("Player 1 SID's: %s", P0_sids.reveal())
+# print_ln("Player 2 SID's: %s", P1_sids.reveal())
+# for i in range(n_sids):
+#    print_ln("Match Found: %s (1 is true, 0 is false)", matches[i].reveal())
+# print_ln("\n")
