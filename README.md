@@ -18,7 +18,7 @@ Our results highlight that for 32 slices on two basestations, we can produce all
 Under the highest privacy level and similar parameters, our protocol generates a slicing allocation in under 7s.
 Similar to non-private methods, our solution finishes within the 60s heartbeat period of a Spectrum Access System, allowing for real-time updates with a changing spectrum allocation.
 
-## Code
+## Running Locally
 
 The code is written using the [MP-SPDZ](https://github.com/data61/MP-SPDZ) DSL which is very similar to python. The code is located in the [src](./src/) directory with file type `*.mpc`. To re-run the experiments and generate the results, you can follow the steps below:
 
@@ -31,6 +31,21 @@ make run        # Run each protocol with differing parameters (this will not rec
 
 make results    # Record results from protocol benchmarks
 make plot       # Plot the results as seen in the paper
+```
+
+## Running in Docker
+
+To run the code in a docker container, you can use the following commands:
+
+```bash
+docker build -t private_slicing .       # Build the docker image
+docker run -it private_slicing          # Run the docker container
+
+# Once inside the container...
+make run                # Run each protocol with differing parameters (this will not record data)
+
+make results            # Record results from protocol benchmarks
+make plot               # Plot the results as seen in the paper
 ```
 
 ## Results
