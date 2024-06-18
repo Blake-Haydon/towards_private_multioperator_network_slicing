@@ -14,9 +14,9 @@ If mobile network operators share spectrum and customers, sensitive customer inf
 To solve this issue, we construct three protocols of varying privacy levels for securely enabling network slicing among different mobile network operators.
 Our protocols employ efficient secure multiparty computation techniques to collaboratively optimise slicing without revealing customers' identities or orders.
 We implement our protocols for the two-party setting using the MP-SPDZ framework.
-Our results highlight that for $32$ slices on two basestations, we can produce allocations in under $5$ms with a balanced security and efficiency requirement.
-Under the highest privacy level and similar parameters, our protocol generates a slicing allocation in under $7$s.
-Similar to non-private methods, our solution finishes within the $60$s heartbeat period of a Spectrum Access System, allowing for real-time updates with a changing spectrum allocation.
+Our results highlight that for 32 slices on two basestations, we can produce allocations in under 5ms with a balanced security and efficiency requirement.
+Under the highest privacy level and similar parameters, our protocol generates a slicing allocation in under 7s.
+Similar to non-private methods, our solution finishes within the 60s heartbeat period of a Spectrum Access System, allowing for real-time updates with a changing spectrum allocation.
 
 ## Code
 
