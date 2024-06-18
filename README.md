@@ -14,11 +14,11 @@ If mobile network operators share spectrum and customers, sensitive customer inf
 To solve this issue, we construct three protocols of varying privacy levels for securely enabling network slicing among different mobile network operators.
 Our protocols employ efficient secure multiparty computation techniques to collaboratively optimise slicing without revealing customers' identities or orders.
 We implement our protocols for the two-party setting using the MP-SPDZ framework.
-Our results highlight that for $32$ slices on two basestations, we can produce allocations in under $5$ms with a balanced security and efficiency requirement.
-Under the highest privacy level and similar parameters, our protocol generates a slicing allocation in under $7$s.
-Similar to non-private methods, our solution finishes within the $60$s heartbeat period of a Spectrum Access System, allowing for real-time updates with a changing spectrum allocation.
+Our results highlight that for 32 slices on two basestations, we can produce allocations in under 5ms with a balanced security and efficiency requirement.
+Under the highest privacy level and similar parameters, our protocol generates a slicing allocation in under 7s.
+Similar to non-private methods, our solution finishes within the 60s heartbeat period of a Spectrum Access System, allowing for real-time updates with a changing spectrum allocation.
 
-## Code
+## Running Locally
 
 The code is written using the [MP-SPDZ](https://github.com/data61/MP-SPDZ) DSL which is very similar to python. The code is located in the [src](./src/) directory with file type `*.mpc`. To re-run the experiments and generate the results, you can follow the steps below:
 
@@ -31,6 +31,21 @@ make run        # Run each protocol with differing parameters (this will not rec
 
 make results    # Record results from protocol benchmarks
 make plot       # Plot the results as seen in the paper
+```
+
+## Running in Docker
+
+To run the code in a docker container, you can use the following commands:
+
+```bash
+docker build -t private_slicing .       # Build the docker image
+docker run -it private_slicing          # Run the docker container
+
+# Once inside the container...
+make run                # Run each protocol with differing parameters (this will not record data)
+
+make results            # Record results from protocol benchmarks
+make plot               # Plot the results as seen in the paper
 ```
 
 ## Results
