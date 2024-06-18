@@ -1,0 +1,4 @@
+# ignore output in `src` directory
+logs/
+plots/
+Programs/
